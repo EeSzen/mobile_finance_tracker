@@ -52,6 +52,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "448892257654-8sluvhjp7gf26345a75eb73kpk0anvpr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eeszen.fintrack.fintrack",
+            "certificate_hash": "fd31ef06678cdaadba74b5efeca46967c122ff51"
+          }
+        },
+        {
           "client_id": "448892257654-s599rpt6hcqjl5fbv51mq7iokdinrssd.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -13,7 +13,8 @@
 migrate_working_dir/
 
 # Private services
-google-services.json
+google-services.json 
+
 
 # IntelliJ related
 *.iml

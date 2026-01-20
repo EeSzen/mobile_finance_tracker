@@ -1,7 +1,6 @@
 import 'package:fintrack/firebase_options.dart';
 import 'package:fintrack/navigation/nav.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 
@@ -19,14 +18,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Flutter Demo',
+      title: 'FinTrack',
       theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      routerConfig: GoRouter(
-        initialLocation: Nav.initial,
-        routes: Nav.routes
-      ),
+      routerConfig: Nav.router,
     );
   }
 }
