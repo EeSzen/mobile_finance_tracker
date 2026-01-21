@@ -46,18 +46,6 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color.fromARGB(255, 0, 0, 0),
-        type: BottomNavigationBarType.fixed,
-        currentIndex: 0,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_filled,color: Color.fromARGB(255, 255, 255, 255),), label: "Home",backgroundColor:Color.fromARGB(255, 255, 255, 255)),
-          BottomNavigationBarItem(icon: Icon(Icons.dashboard,color: Color.fromARGB(255, 255, 255, 255)), label: "Stats"),
-          BottomNavigationBarItem(icon: Icon(Icons.add_circle, size: 50.0,color: Color.fromARGB(255, 255, 255, 255)), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.candlestick_chart,color: Color.fromARGB(255, 255, 255, 255)), label: "Market"),
-          BottomNavigationBarItem(icon: Icon(Icons.person,color: Color.fromARGB(255, 255, 255, 255)), label: "Profile"),
-        ],
-      ),
     );
   }
 }

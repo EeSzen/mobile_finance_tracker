@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:fintrack/components/bottom_nav.dart';
 import 'package:fintrack/ui/auth/auth_screen.dart';
 import 'package:fintrack/ui/home_screen.dart';
 import 'package:fintrack/ui/auth/login_screen.dart';
 import 'package:fintrack/ui/auth/register_screen.dart';
+import 'package:fintrack/ui/profile/profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -49,11 +51,33 @@ class Nav {
       return null;
     },
     routes: [
-      GoRoute(
-        path: "/home",
-        name: Screen.home.name,
-        builder: (context, state) => const HomeScreen(),
+      // ---------- SHELL WITH BOTTOM NAV ----------
+      ShellRoute(
+        builder: (context, state, child) {
+          return BottomNav(child: child);
+        },
+        routes: [
+          GoRoute(
+            path: "/home",
+            name: Screen.home.name,
+            builder: (context, state) => const HomeScreen(),
+          ),
+          GoRoute(
+            path: "/stats",
+            builder: (context, state) => const Placeholder(),
+          ),
+          GoRoute(
+            path: "/market",
+            builder: (context, state) => const Placeholder(),
+          ),
+          GoRoute(
+            path: "/profile",
+            builder: (context, state) => const ProfileScreen(),
+          ),
+        ],
       ),
+
+      // ---------- AUTH (NO BOTTOM NAV) ----------
       GoRoute(
         path: "/auth",
         name: Screen.auth.name,
@@ -74,5 +98,5 @@ class Nav {
 }
 
 enum Screen{
-  home , add, update, login, register, auth
+  home , login, register, auth, profile
 }
