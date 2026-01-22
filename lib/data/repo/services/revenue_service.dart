@@ -8,7 +8,7 @@ class RevenueService {
   final String userId = FirebaseAuth.instance.currentUser!.uid;
 
   CollectionReference get _revenues =>
-      _db.collection("fintrack_users").doc(userId).collection("Revenues");
+      _db.collection("fintrack_users").doc(userId).collection("revenues");
 
   Future<void> addRevenue(Revenue revenue) async {
     await _revenues.add(revenue.toMap());
