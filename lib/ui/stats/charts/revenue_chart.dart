@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 class RevenueChart extends StatelessWidget {
   final Map<IncomeCategory, double> totals;
+  final Map<IncomeCategory, int> counts;
 
-  const RevenueChart({super.key, required this.totals});
+  const RevenueChart({super.key, required this.totals, required this.counts});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class RevenueChart extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: 250,
+          height: 200,
           child: PieChart(
             PieChartData(
               sections: totals.entries.map((entry) {
@@ -27,7 +28,7 @@ class RevenueChart extends StatelessWidget {
                   value: entry.value,
                   title: '${percentage.toStringAsFixed(1)}%',
                   color: _getCategoryColor(entry.key),
-                  radius: 100,
+                  radius: 75,
                   titleStyle: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -40,37 +41,70 @@ class RevenueChart extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 30),
         
         Expanded(
-          child: ListView(
-            children: totals.entries.map((entry) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
+        child: ListView(
+          children: totals.entries.map((entry) {
+            final count = counts[entry.key] ?? 0;  // Get count for this category
+            
+            return Card(
+              margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
                 child: Row(
                   children: [
                     Container(
-                      width: 16,
-                      height: 16,
+                      width: 20,
+                      height: 20,
                       decoration: BoxDecoration(
                         color: _getCategoryColor(entry.key),
                         shape: BoxShape.circle,
                       ),
                     ),
                     const SizedBox(width: 12),
-                    Icon(entry.key.icon, size: 20),
-                    const SizedBox(width: 8),
-                    Expanded(child: Text(entry.key.label)),
+                    Icon(entry.key.icon, size: 24, color: _getCategoryColor(entry.key)),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            entry.key.label,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            "$count transaction${count != 1 ? 's' : ''}",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     Text(
                       "RM${entry.value.toStringAsFixed(2)}",
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                   ],
                 ),
-              );
-            }).toList(),
-          ),
+              ),
+            );
+          }).toList(),
         ),
+      ),
       ],
     );
   }

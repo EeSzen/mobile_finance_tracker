@@ -256,7 +256,7 @@ class _TransactionList extends StatelessWidget {
 
     return ListView.separated(
       itemCount: transactions.length,
-      separatorBuilder: (_, __) => const Divider(),
+      separatorBuilder: (_, __) => const Spacer(),
       itemBuilder: (context, index) {
         final tx = transactions[index];
         if (tx['type'] == 'expense') {
