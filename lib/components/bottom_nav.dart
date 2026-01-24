@@ -1,6 +1,6 @@
-import 'package:fintrack/navigation/nav.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import "package:fintrack/navigation/nav.dart";
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 
 class BottomNav extends StatelessWidget {
   final Widget child;
@@ -37,7 +37,7 @@ class BottomNav extends StatelessWidget {
                       aspectRatio: 1,
                       child: _AddActionTile(
                         icon: Icons.remove_circle_outline,
-                        label: 'Expense',
+                        label: "Expense",
                         onTap: () {
                           Navigator.pop(context);
                           context.pushNamed(Screen.add_expense.name);
@@ -51,7 +51,7 @@ class BottomNav extends StatelessWidget {
                       aspectRatio: 1,
                       child: _AddActionTile(
                         icon: Icons.add_circle_outline,
-                        label: 'Income',
+                        label: "Income",
                         onTap: () {
                           Navigator.pop(context);
                           context.pushNamed(Screen.add_revenue.name);
@@ -78,27 +78,27 @@ class BottomNav extends StatelessWidget {
             children: [
               Expanded(
                 child: IconButton(
-                  icon: Icon(Icons.home_filled, color: iconColor('/home')),
-                  onPressed: () => context.go('/home'),
+                  icon: Icon(Icons.home_filled, color: iconColor("/home")),
+                  onPressed: () => context.go("/home"),
                 ),
               ),
               Expanded(
                 child: IconButton(
-                  icon: Icon(Icons.dashboard, color: iconColor('/stats')),
-                  onPressed: () => context.go('/home'),
+                  icon: Icon(Icons.dashboard, color: iconColor("/stats")),
+                  onPressed: () => context.go("/stats"),
                 ),
               ),
               const Spacer(),
               Expanded(
                 child: IconButton(
-                  icon: Icon(Icons.candlestick_chart, color: iconColor('/market')),
-                  onPressed: () => context.go('/home'),
+                  icon: Icon(Icons.candlestick_chart, color: iconColor("/market")),
+                  onPressed: () => context.go("/home"),
                 ),
               ),
               Expanded(
                 child: IconButton(
-                  icon: Icon(Icons.person, color: iconColor('/profile')),
-                  onPressed: () => context.go('/profile'),
+                  icon: Icon(Icons.person, color: iconColor("/profile")),
+                  onPressed: () => context.go("/profile"),
                 ),
               ),
             ],

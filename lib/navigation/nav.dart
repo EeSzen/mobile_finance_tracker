@@ -8,6 +8,7 @@ import 'package:fintrack/ui/auth/register_screen.dart';
 import 'package:fintrack/ui/manage/add/add_expense_screen.dart';
 import 'package:fintrack/ui/manage/add/add_revenue_screen.dart';
 import 'package:fintrack/ui/profile/profile_screen.dart';
+import 'package:fintrack/ui/stats/stats_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -66,7 +67,8 @@ class Nav {
           ),
           GoRoute(
             path: "/stats",
-            builder: (context, state) => const Placeholder(),
+            name: Screen.stats.name,
+            builder: (context, state) => const StatsScreen(),
           ),
           GoRoute(
             path: "/market",
@@ -113,5 +115,5 @@ class Nav {
 }
 
 enum Screen{
-  home , login, register, auth, profile ,add_expense, add_revenue
+  home , login, register, auth, profile ,add_expense, add_revenue, stats
 }

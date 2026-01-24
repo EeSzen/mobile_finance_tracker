@@ -29,7 +29,9 @@ class ExpenseService {
         .map((snapshot) =>
             snapshot.docs.map((doc) => 
             Expense.fromMap(
-              doc.data() as Map<String, dynamic>)
+              doc.data() as Map<String, dynamic>,
+              docId: doc.id
+              )
             ).toList());
   }
 }
