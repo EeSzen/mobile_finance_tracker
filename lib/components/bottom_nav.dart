@@ -85,7 +85,7 @@ class BottomNav extends StatelessWidget {
               Expanded(
                 child: IconButton(
                   icon: Icon(Icons.dashboard, color: iconColor("/history")),
-                  onPressed: () => context.go("/home"),
+                  onPressed: () => context.go("/history"),
                 ),
               ),
               const Spacer(),

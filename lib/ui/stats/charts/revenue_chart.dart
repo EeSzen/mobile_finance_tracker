@@ -19,28 +19,57 @@ class RevenueChart extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: 200,
-          child: PieChart(
-            PieChartData(
-              sections: totals.entries.map((entry) {
-                final percentage = (entry.value / total) * 100;
-                return PieChartSectionData(
-                  value: entry.value,
-                  title: '${percentage.toStringAsFixed(1)}%',
-                  color: _getCategoryColor(entry.key),
-                  radius: 75,
-                  titleStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+          height: 220,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              PieChart(
+                PieChartData(
+                  sections: totals.entries.map((entry) {
+                    final percentage = (entry.value / total) * 100;
+                    return PieChartSectionData(
+                      value: entry.value,
+                      title: '${percentage.toStringAsFixed(1)}%',
+                      color: _getCategoryColor(entry.key),
+                      radius: 75,
+                      titleStyle: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    );
+                  }).toList(),
+                  sectionsSpace: 2,
+                  centerSpaceRadius: 55,
+                ),
+              ),
+
+              // CENTER TOTAL
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    "Total Income",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.black54,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                );
-              }).toList(),
-              sectionsSpace: 2,
-              centerSpaceRadius: 40,
-            ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "RM${total.toStringAsFixed(2)}",
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
+
         const SizedBox(height: 30),
         
         Expanded(

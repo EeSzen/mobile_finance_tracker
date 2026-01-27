@@ -128,14 +128,6 @@ class _ExpenseStatsState extends State<ExpenseStats> {
           }
         }).toList();
 
-        // final Map<ExpenseCategory, double> totals = {};
-
-        // for (final e in filteredExpenses) {
-        //   totals[e.category] = (totals[e.category] ?? 0) + e.amount;
-        // }
-
-        // return ExpenseChart(totals: totals);
-        
         final Map<ExpenseCategory, double> totals = {};
         final Map<ExpenseCategory, int> counts = {};  // NEW: Track counts
 

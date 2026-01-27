@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintrack/data/model/revenue.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 final FirebaseFirestore _db = FirebaseFirestore.instance;
 
@@ -22,6 +23,21 @@ class RevenueService {
     await _revenues.doc(docId).delete();
   }
 
+  Future<Revenue?> getRevenueById(String docId) async {
+    try {
+      final doc = await _revenues.doc(docId).get();
+      if (!doc.exists) return null;
+      
+      return Revenue.fromMap(
+        doc.data() as Map<String, dynamic>,
+        docId: doc.id,
+      );
+    } catch (e) {
+      debugPrint('Error fetching revenue: $e');
+      return null;
+    }
+  }
+
   Stream<List<Revenue>> getRevenuesStream() {
     return _revenues
         .orderBy('timestamp', descending: true)
@@ -29,7 +45,8 @@ class RevenueService {
         .map((snapshot) =>
             snapshot.docs.map((doc) => 
             Revenue.fromMap(
-              doc.data() as Map<String, dynamic>)
+              doc.data() as Map<String, dynamic>,
+              docId: doc.id)
             ).toList());
   }
 }
