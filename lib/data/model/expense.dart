@@ -29,7 +29,7 @@ class Expense {
     };
   }
 
-  factory Expense.fromMap(Map<String, dynamic> map, {String? docId}) {
+  factory Expense.fromMap(Map<String, dynamic> map, {required String docId}) {
     return Expense(
       docId: docId,
       amountCents: map['amountCents'],
@@ -44,7 +44,7 @@ class Expense {
 
   Expense copy({String? docId}) {
     return Expense(
-      docId: docId ?? this.docId,
+      docId: docId,
       amountCents: amountCents,
       category: category,
       paymentCategory: paymentCategory,

@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+
 import 'package:fintrack/data/enums/expenses_category.dart';
 import 'package:fintrack/data/enums/income_category.dart';
 import 'package:fintrack/data/model/expense.dart';
@@ -6,6 +9,7 @@ import 'package:fintrack/data/repo/services/expense_service.dart';
 import 'package:fintrack/data/repo/services/revenue_service.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:share_plus/share_plus.dart';
 
 class AnnualSummaryScreen extends StatefulWidget {
   const AnnualSummaryScreen({super.key});
@@ -15,7 +19,7 @@ class AnnualSummaryScreen extends StatefulWidget {
 }
 
 class _AnnualSummaryScreenState extends State<AnnualSummaryScreen> {
-  int selectedYear = DateTime.now().year;  // Default to current year
+  int selectedYear = DateTime.now().year; // Default to current year
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +39,7 @@ class _AnnualSummaryScreenState extends State<AnnualSummaryScreen> {
           // Year Picker Section
           Container(
             padding: const EdgeInsets.all(16),
-            color: Colors.grey.shade100,
+            color: Colors.black26,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -46,9 +50,12 @@ class _AnnualSummaryScreenState extends State<AnnualSummaryScreen> {
                 InkWell(
                   onTap: _selectYear,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Colors.grey.shade200,
                       border: Border.all(color: Colors.grey.shade300),
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -59,10 +66,15 @@ class _AnnualSummaryScreenState extends State<AnnualSummaryScreen> {
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
+                            color: Colors.black,
                           ),
                         ),
                         const SizedBox(width: 8),
-                        const Icon(Icons.calendar_today, size: 18),
+                        const Icon(
+                          Icons.calendar_today,
+                          size: 18,
+                          color: Colors.black,
+                        ),
                       ],
                     ),
                   ),
@@ -70,7 +82,7 @@ class _AnnualSummaryScreenState extends State<AnnualSummaryScreen> {
               ],
             ),
           ),
-          
+
           // Summary Content
           Expanded(child: _buildSummaryContent()),
         ],
@@ -83,10 +95,7 @@ class _AnnualSummaryScreenState extends State<AnnualSummaryScreen> {
       stream: Rx.zip2(
         ExpenseService().getExpensesStream(),
         RevenueService().getRevenuesStream(),
-        (expenses, revenues) => {
-          "expenses": expenses,
-          "revenues": revenues,
-        },
+        (expenses, revenues) => {"expenses": expenses, "revenues": revenues},
       ),
       builder: (context, snap) {
         if (!snap.hasData) {
@@ -97,23 +106,32 @@ class _AnnualSummaryScreenState extends State<AnnualSummaryScreen> {
         final allRevenues = snap.data!["revenues"] as List<Revenue>;
 
         // Filter by selected year
-        final yearExpenses = allExpenses.where((e) => e.timestamp.year == selectedYear).toList();
-        final yearRevenues = allRevenues.where((r) => r.timestamp.year == selectedYear).toList();
+        final yearExpenses = allExpenses
+            .where((e) => e.timestamp.year == selectedYear)
+            .toList();
+        final yearRevenues = allRevenues
+            .where((r) => r.timestamp.year == selectedYear)
+            .toList();
 
         // Calculate totals
-        final totalExpenses = yearExpenses.fold(0.0, (sum, e) => sum + e.amount);
+        final totalExpenses = yearExpenses.fold(
+          0.0,
+          (sum, e) => sum + e.amount,
+        );
         final totalIncome = yearRevenues.fold(0.0, (sum, r) => sum + r.amount);
         final netCashFlow = totalIncome - totalExpenses;
 
         // Group by category
         final Map<ExpenseCategory, double> expensesByCategory = {};
         for (final e in yearExpenses) {
-          expensesByCategory[e.category] = (expensesByCategory[e.category] ?? 0) + e.amount;
+          expensesByCategory[e.category] =
+              (expensesByCategory[e.category] ?? 0) + e.amount;
         }
 
         final Map<IncomeCategory, double> incomeByCategory = {};
         for (final r in yearRevenues) {
-          incomeByCategory[r.category] = (incomeByCategory[r.category] ?? 0) + r.amount;
+          incomeByCategory[r.category] =
+              (incomeByCategory[r.category] ?? 0) + r.amount;
         }
 
         return SingleChildScrollView(
@@ -123,7 +141,7 @@ class _AnnualSummaryScreenState extends State<AnnualSummaryScreen> {
             children: [
               _buildHeader(selectedYear),
               const SizedBox(height: 24),
-              
+
               _buildSection(
                 title: 'TOTAL INCOME',
                 amount: totalIncome,
@@ -131,9 +149,9 @@ class _AnnualSummaryScreenState extends State<AnnualSummaryScreen> {
               ),
               const SizedBox(height: 12),
               _buildIncomeBreakdown(incomeByCategory),
-              
+
               const Divider(height: 40),
-              
+
               _buildSection(
                 title: 'TOTAL EXPENSES',
                 amount: totalExpenses,
@@ -141,9 +159,9 @@ class _AnnualSummaryScreenState extends State<AnnualSummaryScreen> {
               ),
               const SizedBox(height: 12),
               _buildExpenseBreakdown(expensesByCategory),
-              
+
               const Divider(height: 40),
-              
+
               _buildSection(
                 title: 'NET CASH FLOW',
                 amount: netCashFlow,
@@ -152,12 +170,9 @@ class _AnnualSummaryScreenState extends State<AnnualSummaryScreen> {
               const SizedBox(height: 8),
               Text(
                 netCashFlow >= 0 ? 'Surplus' : 'Deficit',
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontSize: 14,
-                ),
+                style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
               ),
-              
+
               const SizedBox(height: 40),
               _buildDisclaimerSection(),
             ],
@@ -188,7 +203,7 @@ class _AnnualSummaryScreenState extends State<AnnualSummaryScreen> {
         );
       },
     );
-    
+
     if (picked != null) {
       setState(() {
         selectedYear = picked;
@@ -218,10 +233,7 @@ class _AnnualSummaryScreenState extends State<AnnualSummaryScreen> {
           const SizedBox(height: 8),
           Text(
             'Year: $year',
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 16,
-            ),
+            style: const TextStyle(color: Colors.white70, fontSize: 16),
           ),
         ],
       ),
@@ -282,10 +294,7 @@ class _AnnualSummaryScreenState extends State<AnnualSummaryScreen> {
             title: Text(entry.key.label),
             trailing: Text(
               'RM ${entry.value.toStringAsFixed(2)}',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
           ),
         );
@@ -310,10 +319,7 @@ class _AnnualSummaryScreenState extends State<AnnualSummaryScreen> {
             title: Text(entry.key.label),
             trailing: Text(
               'RM ${entry.value.toStringAsFixed(2)}',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
           ),
         );
@@ -323,19 +329,21 @@ class _AnnualSummaryScreenState extends State<AnnualSummaryScreen> {
 
   Widget _buildDisclaimerSection() {
     return Container(
+      width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        border: Border.all(color: Colors.orange.shade900, width: 2),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Text(
             'DISCLAIMER',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 14,
+              fontSize: 16,
+              color: Colors.orange,
             ),
           ),
           const SizedBox(height: 12),
@@ -355,9 +363,129 @@ class _AnnualSummaryScreenState extends State<AnnualSummaryScreen> {
     );
   }
 
-  void _shareReport(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Share feature coming soon!')),
-    );
+  void _shareReport(BuildContext context) async {
+    // Get the current data from StreamBuilder
+    final expenseService = ExpenseService();
+    final revenueService = RevenueService();
+
+    // Fetch data
+    final allExpenses = await expenseService.getExpensesStream().first;
+    final allRevenues = await revenueService.getRevenuesStream().first;
+
+    // Filter by selected year
+    final yearExpenses = allExpenses
+        .where((e) => e.timestamp.year == selectedYear)
+        .toList();
+    final yearRevenues = allRevenues
+        .where((r) => r.timestamp.year == selectedYear)
+        .toList();
+
+    // Calculate totals
+    final totalExpenses = yearExpenses.fold(0.0, (sum, e) => sum + e.amount);
+    final totalIncome = yearRevenues.fold(0.0, (sum, r) => sum + r.amount);
+    final netCashFlow = totalIncome - totalExpenses;
+
+    // Group by category
+    final Map<IncomeCategory, double> incomeByCategory = {};
+    for (final r in yearRevenues) {
+      incomeByCategory[r.category] =
+          (incomeByCategory[r.category] ?? 0) + r.amount;
+    }
+
+    final Map<ExpenseCategory, double> expensesByCategory = {};
+    for (final e in yearExpenses) {
+      expensesByCategory[e.category] =
+          (expensesByCategory[e.category] ?? 0) + e.amount;
+    }
+
+    // Generate CSV content
+    final csv = StringBuffer();
+
+    // Header
+    csv.writeln('ANNUAL FINANCIAL REPORT');
+    csv.writeln('Year,$selectedYear');
+    csv.writeln('Generated,${DateTime.now().toString().split(' ')[0]}');
+    csv.writeln('');
+
+    // Summary Section
+    csv.writeln('SUMMARY');
+    csv.writeln('Category,Amount (RM)');
+    csv.writeln('Total Income,${totalIncome.toStringAsFixed(2)}');
+    csv.writeln('Total Expenses,${totalExpenses.toStringAsFixed(2)}');
+    csv.writeln('Net Cash Flow,${netCashFlow.toStringAsFixed(2)}');
+    csv.writeln('Status,${netCashFlow >= 0 ? "Surplus" : "Deficit"}');
+    csv.writeln('');
+
+    // Income Breakdown
+    csv.writeln('INCOME BREAKDOWN');
+    csv.writeln('Category,Amount (RM)');
+    if (incomeByCategory.isEmpty) {
+      csv.writeln('No data,-');
+    } else {
+      for (final entry in incomeByCategory.entries) {
+        csv.writeln('${entry.key.label},${entry.value.toStringAsFixed(2)}');
+      }
+    }
+    csv.writeln('');
+
+    // Expense Breakdown
+    csv.writeln('EXPENSE BREAKDOWN');
+    csv.writeln('Category,Amount (RM)');
+    if (expensesByCategory.isEmpty) {
+      csv.writeln('No data,-');
+    } else {
+      for (final entry in expensesByCategory.entries) {
+        csv.writeln('${entry.key.label},${entry.value.toStringAsFixed(2)}');
+      }
+    }
+    csv.writeln('');
+
+    // Disclaimer
+    csv.writeln('DISCLAIMER');
+    csv.writeln('This report is for personal financial tracking only');
+    csv.writeln('Amounts shown are based on your recorded transactions');
+    csv.writeln('Not intended as tax advice or official documentation');
+    csv.writeln('For tax filing consult with a qualified professional');
+
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/Annual_Report_$selectedYear.csv');
+    await file.writeAsString(csv.toString());
+
+    // Share the CSV
+    await Share.shareXFiles([
+      XFile(file.path),
+    ], subject: 'Annual Financial Report $selectedYear');
+    debugPrint('✅ Share completed');
   }
 }
+
+/* 
+OUTPUT EXAMPLE OF THE CSV REPORT:
+
+ANNUAL FINANCIAL REPORT
+Year,2026
+Generated,2026-01-28
+
+SUMMARY
+Category,Amount (RM)
+Total Income,10000.00
+Total Expenses,81.50
+Net Cash Flow,9918.50
+Status,Surplus
+
+INCOME BREAKDOWN
+Category,Amount (RM)
+Salary,10000.00
+
+EXPENSE BREAKDOWN
+Category,Amount (RM)
+Entertainment,69.00
+Transport,12.50
+
+DISCLAIMER
+This report is for personal financial tracking only
+Amounts shown are based on your recorded transactions
+Not intended as tax advice or official documentation
+For tax filing consult with a qualified professional
+
+*/

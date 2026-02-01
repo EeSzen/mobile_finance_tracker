@@ -30,7 +30,6 @@ class _ExpenseStatsState extends State<ExpenseStats> {
   Widget _buildPeriodToggle() {
     return Column(
       children: [
-        // Keep your existing toggle buttons
         Container(
           padding: const EdgeInsets.all(4),
           decoration: BoxDecoration(
@@ -49,7 +48,6 @@ class _ExpenseStatsState extends State<ExpenseStats> {
           ),
         ),
         
-        // NEW: Add date selector row
         const SizedBox(height: 12),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -129,14 +127,14 @@ class _ExpenseStatsState extends State<ExpenseStats> {
         }).toList();
 
         final Map<ExpenseCategory, double> totals = {};
-        final Map<ExpenseCategory, int> counts = {};  // NEW: Track counts
+        final Map<ExpenseCategory, int> counts = {}; 
 
         for (final e in filteredExpenses) {
           totals[e.category] = (totals[e.category] ?? 0) + e.amount;
-          counts[e.category] = (counts[e.category] ?? 0) + 1;  // NEW: Increment count
+          counts[e.category] = (counts[e.category] ?? 0) + 1;
         }
 
-        return ExpenseChart(totals: totals, counts: counts);  // NEW: Pass counts
+        return ExpenseChart(totals: totals, counts: counts);
       },
     );
   }
@@ -146,7 +144,7 @@ class _ExpenseStatsState extends State<ExpenseStats> {
     final picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime(2000), // Earliest date you allow
+      firstDate: DateTime(2000),
       lastDate: DateTime.now(),
       helpText: "Select Month",
     );

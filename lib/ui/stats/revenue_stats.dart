@@ -30,7 +30,6 @@ class _RevenueStatsState extends State<RevenueStats> {
   Widget _buildPeriodToggle() {
     return Column(
       children: [
-        // Keep your existing toggle buttons
         Container(
           padding: const EdgeInsets.all(4),
           decoration: BoxDecoration(
@@ -49,7 +48,6 @@ class _RevenueStatsState extends State<RevenueStats> {
           ),
         ),
         
-        // NEW: Add date selector row
         const SizedBox(height: 12),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -128,23 +126,15 @@ class _RevenueStatsState extends State<RevenueStats> {
           }
         }).toList();
 
-        // final Map<IncomeCategory, double> totals = {};
-
-        // for (final r in filteredRevenues) {
-        //   totals[r.category] = (totals[r.category] ?? 0) + r.amount;
-        // }
-
-        // return RevenueChart(totals: totals);
-
         final Map<IncomeCategory, double> totals = {};
-        final Map<IncomeCategory, int> counts = {};  // NEW: Track counts
+        final Map<IncomeCategory, int> counts = {}; 
 
         for (final e in filteredRevenues) {
           totals[e.category] = (totals[e.category] ?? 0) + e.amount;
-          counts[e.category] = (counts[e.category] ?? 0) + 1;  // NEW: Increment count
+          counts[e.category] = (counts[e.category] ?? 0) + 1;
         }
 
-        return RevenueChart(totals: totals, counts: counts);  // NEW: Pass counts
+        return RevenueChart(totals: totals, counts: counts);
       },
     );
   }
@@ -154,7 +144,7 @@ class _RevenueStatsState extends State<RevenueStats> {
     final picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime(2000), // Earliest date you allow
+      firstDate: DateTime(2000),
       lastDate: DateTime.now(),
       helpText: "Select Month",
     );

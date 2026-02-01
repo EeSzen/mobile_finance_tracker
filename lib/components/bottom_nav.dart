@@ -24,6 +24,7 @@ class BottomNav extends StatelessWidget {
         shape: CircleBorder(),
         onPressed: () {
           showModalBottomSheet(
+            backgroundColor: Colors.black,
             context: context,
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -63,7 +64,7 @@ class BottomNav extends StatelessWidget {
               ),
             ),
           );
-        },  
+        },
         child: const Icon(Icons.add, color: Colors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -91,7 +92,10 @@ class BottomNav extends StatelessWidget {
               const Spacer(),
               Expanded(
                 child: IconButton(
-                  icon: Icon(Icons.candlestick_chart, color: iconColor("/stats")),
+                  icon: Icon(
+                    Icons.candlestick_chart,
+                    color: iconColor("/stats"),
+                  ),
                   onPressed: () => context.go("/stats"),
                 ),
               ),
@@ -129,20 +133,21 @@ class _AddActionTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20),
         decoration: BoxDecoration(
-          color: Colors.grey.shade100,
-          border: Border.all(color: Colors.black , width: 3.0),
+          color: Colors.grey.shade900,
+          border: Border.all(color: Colors.black, width: 3.0),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 48),
+            Icon(icon, size: 48, color: Colors.white),
             const SizedBox(height: 8),
             Text(
               label,
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
+                color: Colors.white,
               ),
             ),
           ],

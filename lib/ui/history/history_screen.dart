@@ -162,55 +162,68 @@ class _HistoryBodyState extends State<_HistoryBody> {
                           borderSide: BorderSide.none,
                         ),
                         filled: true,
-                        fillColor: Colors.grey.shade200,
+                        fillColor: Colors.black54,
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  child: Text(
-                    startDate == null ? "Start Date" : _formatDate(startDate),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      child: Text(
+                        startDate == null
+                            ? "Start Date"
+                            : _formatDate(startDate),
+                      ),
+                      onPressed: () async {
+                        final date = await showDatePicker(
+                          context: context,
+                          initialDate: startDate ?? DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: endDate ?? DateTime.now(),
+                        );
+                        if (date != null) setState(() => startDate = date);
+                      },
+                    ),
                   ),
-                  onPressed: () async {
-                    final date = await showDatePicker(
-                      context: context,
-                      initialDate: startDate ?? DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime.now(),
-                    );
-                    if (date != null) setState(() => startDate = date);
-                  },
-                ),
-                ElevatedButton(
-                  child: Text(
-                    endDate == null ? "End Date" : _formatDate(endDate),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: Text("-"),
                   ),
-                  onPressed: () async {
-                    final date = await showDatePicker(
-                      context: context,
-                      initialDate: endDate ?? DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime.now(),
-                    );
-                    if (date != null) setState(() => endDate = date);
-                  },
-                ),
-                if (startDate != null || endDate != null)
-                  IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: () => setState(() {
-                      startDate = null;
-                      endDate = null;
-                    }),
+                  Expanded(
+                    child: ElevatedButton(
+                      child: Text(
+                        endDate == null ? "End Date" : _formatDate(endDate),
+                      ),
+                      onPressed: () async {
+                        final date = await showDatePicker(
+                          context: context,
+                          initialDate: endDate ?? (startDate ?? DateTime.now()),
+                          firstDate: startDate ?? DateTime(2000),
+                          lastDate: DateTime.now(),
+                        );
+                        if (date != null) setState(() => endDate = date);
+                      },
+                    ),
                   ),
-              ],
+                  if (startDate != null || endDate != null)
+                    IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () => setState(() {
+                        startDate = null;
+                        endDate = null;
+                      }),
+                    ),
+                ],
+              ),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
                   padding: EdgeInsets.all(16.0),
@@ -232,28 +245,47 @@ class _HistoryBodyState extends State<_HistoryBody> {
                     ],
                   ),
                 ),
-
-                DropdownButton<String>(
-                  value: sortOption,
-                  items: const [
-                    DropdownMenuItem(
-                      value: "date_desc",
-                      child: Text("Newest first"),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: PopupMenuButton<String>(
+                    onSelected: (val) => setState(() => sortOption = val),
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        value: "date_desc",
+                        child: Text("Newest first"),
+                      ),
+                      const PopupMenuItem(
+                        value: "date_asc",
+                        child: Text("Oldest first"),
+                      ),
+                      const PopupMenuItem(
+                        value: "amount_desc",
+                        child: Text("Highest amount"),
+                      ),
+                      const PopupMenuItem(
+                        value: "amount_asc",
+                        child: Text("Lowest amount"),
+                      ),
+                    ],
+                    child: Chip(
+                      label: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            sortOption == "date_desc"
+                                ? "Newest first"
+                                : sortOption == "date_asc"
+                                ? "Oldest first"
+                                : sortOption == "amount_desc"
+                                ? "Highest amount"
+                                : "Lowest amount",
+                          ),
+                          const SizedBox(width: 4),
+                          const Icon(Icons.arrow_drop_down, size: 18),
+                        ],
+                      ),
                     ),
-                    DropdownMenuItem(
-                      value: "date_asc",
-                      child: Text("Oldest first"),
-                    ),
-                    DropdownMenuItem(
-                      value: "amount_desc",
-                      child: Text("Highest amount"),
-                    ),
-                    DropdownMenuItem(
-                      value: "amount_asc",
-                      child: Text("Lowest amount"),
-                    ),
-                  ],
-                  onChanged: (val) => setState(() => sortOption = val!),
+                  ),
                 ),
               ],
             ),
@@ -278,11 +310,13 @@ class _HistoryBodyState extends State<_HistoryBody> {
 
                       if (item.isExpense) {
                         context.pushNamed(
-                          Screen.edit_expense.name, pathParameters: {'id': item.id}
+                          Screen.edit_expense.name,
+                          pathParameters: {'id': item.id},
                         );
                       } else {
                         context.pushNamed(
-                          Screen.edit_revenue.name, pathParameters: {'id': item.id}
+                          Screen.edit_revenue.name,
+                          pathParameters: {'id': item.id},
                         );
                       }
                     },
