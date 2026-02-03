@@ -289,41 +289,72 @@ class _HistoryBodyState extends State<_HistoryBody> {
                 ),
               ],
             ),
+            // list of data
             Expanded(
-              child: ListView.separated(
-                padding: const EdgeInsets.all(16),
-                itemCount: items.length,
-                separatorBuilder: (_, _) => const SizedBox(height: 8),
-                itemBuilder: (_, i) {
-                  final item = items[i];
-                  return InkWell(
-                    borderRadius: BorderRadius.circular(14),
-                    onTap: () {
-                      if (item.id.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Cannot edit this item'),
+              child: items.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.search_off,
+                            size: 64,
+                            color: Colors.grey.shade400,
                           ),
-                        );
-                        return;
-                      }
+                          const SizedBox(height: 16),
+                          Text(
+                            'No transactions found',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Try adjusting your filters',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey.shade500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.separated(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: items.length,
+                      separatorBuilder: (_, _) => const SizedBox(height: 8),
+                      itemBuilder: (_, i) {
+                        final item = items[i];
+                        return InkWell(
+                          borderRadius: BorderRadius.circular(14),
+                          onTap: () {
+                            if (item.id.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Cannot edit this item'),
+                                ),
+                              );
+                              return;
+                            }
 
-                      if (item.isExpense) {
-                        context.pushNamed(
-                          Screen.edit_expense.name,
-                          pathParameters: {'id': item.id},
+                            if (item.isExpense) {
+                              context.pushNamed(
+                                Screen.edit_expense.name,
+                                pathParameters: {'id': item.id},
+                              );
+                            } else {
+                              context.pushNamed(
+                                Screen.edit_revenue.name,
+                                pathParameters: {'id': item.id},
+                              );
+                            }
+                          },
+                          child: _HistoryCard(item: item),
                         );
-                      } else {
-                        context.pushNamed(
-                          Screen.edit_revenue.name,
-                          pathParameters: {'id': item.id},
-                        );
-                      }
-                    },
-                    child: _HistoryCard(item: item),
-                  );
-                },
-              ),
+                      },
+                    ),
             ),
           ],
         );
