@@ -65,7 +65,7 @@ class _HistoryBodyState extends State<_HistoryBody> {
   Widget build(BuildContext context) {
     return StreamBuilder<Map<String, dynamic>>(
       // zips both streams together //
-      stream: Rx.zip2(
+      stream: Rx.combineLatest2(
         _expenseService.getExpensesStream(),
         _revenueService.getRevenuesStream(),
         (expenses, revenues) => {"expenses": expenses, "revenues": revenues},
@@ -252,19 +252,19 @@ class _HistoryBodyState extends State<_HistoryBody> {
                     itemBuilder: (context) => [
                       const PopupMenuItem(
                         value: "date_desc",
-                        child: Text("Newest first"),
+                        child: Text("Newest"),
                       ),
                       const PopupMenuItem(
                         value: "date_asc",
-                        child: Text("Oldest first"),
+                        child: Text("Oldest"),
                       ),
                       const PopupMenuItem(
                         value: "amount_desc",
-                        child: Text("Highest amount"),
+                        child: Text("Highest"),
                       ),
                       const PopupMenuItem(
                         value: "amount_asc",
-                        child: Text("Lowest amount"),
+                        child: Text("Lowest"),
                       ),
                     ],
                     child: Chip(
@@ -273,12 +273,12 @@ class _HistoryBodyState extends State<_HistoryBody> {
                         children: [
                           Text(
                             sortOption == "date_desc"
-                                ? "Newest first"
+                                ? "Newest"
                                 : sortOption == "date_asc"
-                                ? "Oldest first"
+                                ? "Oldest"
                                 : sortOption == "amount_desc"
-                                ? "Highest amount"
-                                : "Lowest amount",
+                                ? "Highest"
+                                : "Lowest",
                           ),
                           const SizedBox(width: 4),
                           const Icon(Icons.arrow_drop_down, size: 18),

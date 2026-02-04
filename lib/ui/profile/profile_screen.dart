@@ -176,26 +176,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _StatCard(
-                        title: "This Month's Income",
-                        amount: monthlyIncome,
-                        icon: Icons.trending_up,
-                        color: Colors.green,
+                IntrinsicHeight(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: _StatCard(
+                          title: "This Month's Income",
+                          amount: monthlyIncome,
+                          icon: Icons.trending_up,
+                          color: Colors.green,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _StatCard(
-                        title: "This Month's Spending",
-                        amount: monthlySpending,
-                        icon: Icons.trending_down,
-                        color: Colors.red,
+                      const SizedBox(width: 2),
+                      Expanded(
+                        child: _StatCard(
+                          title: "This Month's Expense",
+                          amount: monthlySpending,
+                          icon: Icons.trending_down,
+                          color: Colors.red,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),

@@ -36,7 +36,7 @@ class _AuthScreenState extends State<AuthScreen> {
             ),
             Text("Your personal finance tracker"),
             SizedBox(height: 20.0),
-            FilledButton(
+            ElevatedButton(
               onPressed: () => {_navToLogin()},
               child: Text("Let's start"),
             ),
