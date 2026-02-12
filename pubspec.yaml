@@ -43,6 +43,7 @@ dependencies:
   rxdart: ^0.28.0
   share_plus: ^10.0.0
   path_provider: ^2.1.5
+  flutter_native_splash: ^2.4.2
 
 dev_dependencies:
   flutter_test:
@@ -95,3 +96,12 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_native_splash:
+  color: "#000000"
+  image: assets/images/fintrack_logo.png
+  android_12:
+    color: "#000000"
+    image: assets/images/fintrack_logo.png
+  android: true
+  ios: true
